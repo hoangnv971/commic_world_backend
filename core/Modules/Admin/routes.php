@@ -8,6 +8,11 @@ Route::group(
 		'middleware' => ['web'],
 		'namespace'	=> 'Core\\Modules\\Admin\\Controllers'
 	], function() {
-        Route::get('dashboard', 'DashboardController@index');
+        Route::get('/', 'DashboardController@index');
+		Route::group([
+			'prefix' => 'auth',
+		],function () {
+			Route::get('/', 'Auth\AuthController@index');
+		});
     }
 );

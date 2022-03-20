@@ -168,6 +168,7 @@ return [
          * Package Service Providers...
          */
         Core\Providers\CoreServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
 
         /*
          * Application Service Providers...
