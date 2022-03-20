@@ -50,7 +50,7 @@ class InterfaceMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return  __DIR__.'/stubs/Interface.stub';
+        return  __DIR__.'/Stubs/Interface.stub';
     }
 
     protected function getPath($name)

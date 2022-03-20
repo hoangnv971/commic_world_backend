@@ -2,14 +2,14 @@
 
 namespace {{ namespace }};
 
-use {{ namespace }}\Contracts\{{ dummyName }}RepositoryContract;
-use Core\Models\{{ dummyName }};
+use {{ namespace }}\Contracts\{{ repositoryName }}RepositoryContract;
+use Core\Models\{{ repositoryName }};
 
-class {{ class }}Repository implements {{ dummyName }}RepositoryContract
+class {{ class }} implements {{ repositoryName }}RepositoryContract
 {
     protected $model;
 
-    public function __construct({{ dummyName }} $model)
+    public function __construct({{ repositoryName }} $model)
     {
         $this->model = $model;
     }

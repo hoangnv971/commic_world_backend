@@ -16,35 +16,47 @@ class RepositoryMakeCommand extends GeneratorCommand
     protected $description = 'Command make repository';
 
     protected $type = "Repository";
+
+    protected $originName = "";
   
     public function handle()
     {
+        $this->getOriginName();
         $this->createRepositoryInterface();
         parent::handle();
     }
 
     protected function createRepositoryInterface()
     {
-        $repositoryName = Str::studly(class_basename($this->argument('name')));
+        $name = $this->originName;
     
         $this->call('make:interface', [
-            'name'  => "{$repositoryName}RepositoryContract",
+            'name'  => "{$name}RepositoryContract",
             '-r'   => true
         ]);        
     }
 
+    protected function getOriginName()
+    {
+        $repositoryName = Str::studly($this->argument('name'));
+
+        if(str_contains($repositoryName, $this->type))
+        {
+            $repositoryName = substr($repositoryName, 0, strpos($repositoryName, $this->type));
+        }
+        $this->originName = class_basename($repositoryName);
+    }
+
     protected function getStub()
     {
-        return  __DIR__.'/stubs/Repository.stub';
+        return  __DIR__.'/Stubs/Repository.stub';
     }
 
     protected function buildClass($name)
     {
-        $repositoryName = Str::studly(class_basename($this->argument('name')));
-
         return str_replace( 
-            ['{{dummyName}}', '{{ dummyName }}', 'dummyName'], 
-            $repositoryName, 
+            ['{{repositoryName}}', '{{ repositoryName }}', 'repositoryName'], 
+            $this->originName, 
             parent::buildClass($name)
         );
     }
@@ -61,7 +73,6 @@ class RepositoryMakeCommand extends GeneratorCommand
     
     protected function getPath($name)
     {
-        $name = $name."Repository";
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 
         return base_path().'/core/'.str_replace('\\', '/', $name).'.php';

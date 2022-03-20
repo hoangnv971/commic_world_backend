@@ -1,14 +1,14 @@
 <?php 
 namespace {{ namespace }};
 
-use {{ namespace }}\Contracts\{{ dummyName }}ServiceContract;
-use Core\Repositories\Contracts\{{ dummyName }}RepositoryContract;
+use {{ namespace }}\Contracts\{{ serviceName }}ServiceContract;
+use Core\Repositories\Contracts\{{ serviceName }}RepositoryContract;
 
-class {{ class }}Service implements {{ dummyName }}ServiceContract
+class {{ class }} implements {{ serviceName }}ServiceContract
 {
     protected $repository;
 
-    public function __construct({{ dummyName }}RepositoryContract $repository)
+    public function __construct({{ serviceName }}RepositoryContract $repository)
     {
         $this->repository = $repository;
     }

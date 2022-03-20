@@ -17,25 +17,38 @@ class ServiceMakeCommand extends GeneratorCommand
 
     protected $type = 'Service';
 
+    protected $originName = '';
+
     public function handle()
     {
+        $this->getOriginName();
         $this->createServiceInterface();
         parent::handle();
     }
 
     protected function createServiceInterface()
     {
-        $serviceName= Str::studly(class_basename($this->argument('name')));
-    
+        $name = $this->originName;
         $this->call('make:interface', [
-            'name'  => "{$serviceName}ServiceContract",
+            'name'  => "{$name}ServiceContract",
             '-s'   => true
         ]);        
+    }
+
+    protected function getOriginName()
+    {
+        $serviceName = Str::studly($this->argument('name'));
+
+        if(str_contains($serviceName, $this->type))
+        {
+            $serviceName = substr($serviceName, 0, strpos($serviceName, $this->type));
+        }
+        $this->originName = class_basename($serviceName);
     }
  
     protected function getStub()
     {
-        return __DIR__.'/Stubs/service.stub';
+        return __DIR__.'/Stubs/Service.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
@@ -50,18 +63,16 @@ class ServiceMakeCommand extends GeneratorCommand
 
     protected function buildClass($name)
     {   
-        $serviceName = Str::studly(class_basename($this->argument('name')));
-        
+
         return str_replace( 
-            ['{{dummyName}}', '{{ dummyName }}', 'dummyName'], 
-            $serviceName, 
+            ['{{ serviceName }}'], 
+            $this->originName, 
             parent::buildClass($name)
         );
     }
 
     protected function getPath($name)
     {
-        $name = $name."Service";
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
         
         return base_path().'/core/'.str_replace('\\', '/', $name).'.php';
